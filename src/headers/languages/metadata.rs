@@ -381,7 +381,7 @@ impl HeaderLanguage for Metadata {
                     } else if formatted_constant.contains('.') {
                         &PhantomData::<<f64 as layout::ReprC>::CLayout> as &dyn PhantomCType
                     } else {
-                        &PhantomData::<<libc::c_int as layout::ReprC>::CLayout> as &dyn PhantomCType
+                        &PhantomData::<<i32 as layout::ReprC>::CLayout> as &dyn PhantomCType
                     }
                 } else {
                     ty
