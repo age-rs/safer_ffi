@@ -374,11 +374,11 @@ impl HeaderLanguage for Metadata {
                 let constant_type = if skip_type {
                     let formatted_constant = format!("{:?}", value);
 
-                    if formatted_constant.starts_with("\"") {
+                    if formatted_constant.starts_with('"') {
                         &PhantomData::<<char_p::Ref<'_> as layout::ReprC>::CLayout> as &dyn PhantomCType
-                    } else if formatted_constant.starts_with("\'") {
+                    } else if formatted_constant.starts_with('\'') {
                         &PhantomData::<<c_char as layout::ReprC>::CLayout> as &dyn PhantomCType
-                    } else if formatted_constant.contains(".") {
+                    } else if formatted_constant.contains('.') {
                         &PhantomData::<<f64 as layout::ReprC>::CLayout> as &dyn PhantomCType
                     } else {
                         &PhantomData::<<libc::c_int as layout::ReprC>::CLayout> as &dyn PhantomCType
