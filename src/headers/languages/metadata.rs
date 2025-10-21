@@ -145,7 +145,7 @@ impl HeaderLanguage for Metadata {
 
     fn declare_opaque_type (
         self: &'_ Self,
-        this: &dyn HeaderLanguage,
+        _this: &dyn HeaderLanguage,
         ctx: &'_ mut dyn Definer,
         docs: Docs<'_>,
         self_ty: &'_ dyn PhantomCType,
@@ -331,7 +331,7 @@ impl HeaderLanguage for Metadata {
     fn emit_array_ty(
         self: &'_ Self, this: &dyn HeaderLanguage,
         out: &mut dyn Write,
-        var_name: Option<&dyn Display>,
+        _var_name: Option<&dyn Display>,
         newtype_name: &'_ str,
         elem_ty: &'_ dyn PhantomCType,
         array_len: usize
@@ -445,7 +445,7 @@ impl Metadata {
 
     fn emit_type_usage(
         self: &'_ Self,
-        this: &dyn HeaderLanguage,
+        _this: &dyn HeaderLanguage,
         ctx: &'_ mut dyn Definer,
         indent: &'_ Indentation,
         field_name: &'_ str,
