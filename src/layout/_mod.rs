@@ -141,9 +141,12 @@ pub unsafe trait CType: Sized + Copy {
     ///         "Foo".into()
     ///     }
     ///
-    ///     type OPAQUE_KIND = OpaqueKind::Concrete;
+    ///     #[::safer_ffi::cfg_headers]
+    ///     fn metadata_type_usage() -> String {
+    ///         String::new()
+    ///     }
     ///
-    ///     // ...
+    ///     type OPAQUE_KIND = OpaqueKind::Concrete;
     /// }
     /// ```
     #[allow(nonstandard_style)]
