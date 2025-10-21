@@ -24,6 +24,7 @@ use ::safer_ffi::{
 };
 
 #[derive_ReprC]
+#[cfg_attr(feature = "stabby", stabby::stabby)]
 #[repr(C)]
 pub struct SomeStruct {
     a: Option<repr_c::Box<[u8]>>,

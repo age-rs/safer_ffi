@@ -38,7 +38,7 @@ for Option<T>
 
 #[derive(Debug, Clone, Copy)]
 pub struct OptionCLayout<T : CType> {
-    wrappedCLayout: T,
+    pub(crate) wrappedCLayout: T,
 }
 
 unsafe
@@ -104,6 +104,23 @@ impl<T : ReprC + CType> ReprC for OptionCLayout<T> {
         T::is_valid(it)
     }
 }
+
+#[cfg(feature = "js")]
+const _: () = {
+    use crate::js::*;
+
+    impl<T : CType + ReprNapi> ReprNapi for OptionCLayout<T> {
+        type NapiValue = T::NapiValue;
+
+        fn to_napi_value(self: Self, env: &'_ Env) -> Result<Self::NapiValue> {
+            T::to_napi_value(self.wrappedCLayout, env)
+        }
+
+        fn from_napi_value(env: &'_ Env, napi_value: Self::NapiValue) -> Result<Self> {
+            T::from_napi_value(env, napi_value).map(|wrapped| OptionCLayout { wrappedCLayout: wrapped })
+        }
+    }
+};
 
 #[cfg_attr(rustfmt, rustfmt::skip)]
 macro_rules! unsafe_impls {(
