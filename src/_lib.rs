@@ -422,8 +422,8 @@ macro_rules! __abort_with_msg__ { ($($tt:tt)*) => (
     }}
 )}
 
-extern crate self as safer_ffi;
 extern crate core;
+extern crate self as safer_ffi;
 
 #[apply(hidden_export)]
 use __ as ඞ;

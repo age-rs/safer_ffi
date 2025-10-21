@@ -166,6 +166,9 @@ fn respan(
 }
 
 #[proc_macro_attribute]
-pub fn ffi_metadata(_attrs: TokenStream, input: TokenStream) -> TokenStream {
+pub fn ffi_metadata(
+    _attrs: TokenStream,
+    input: TokenStream,
+) -> TokenStream {
     input
 }

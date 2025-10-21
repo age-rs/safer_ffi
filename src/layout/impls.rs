@@ -830,20 +830,19 @@ unsafe impl CType for c_int {
     }
 }
 
-
 #[derive(Debug, Clone, Copy)]
-pub struct NonNullCLayout<T : CType> {
+pub struct NonNullCLayout<T: CType> {
     pub(crate) wrappedCLayout: T,
 }
 
-impl<T : CType> NonNullCLayout<T> {
+impl<T: CType> NonNullCLayout<T> {
     #[inline]
     pub(crate) fn new(wrappedCLayout: T) -> Self {
         NonNullCLayout { wrappedCLayout }
     }
 }
 
-impl<T : CType> From<T> for NonNullCLayout<T> {
+impl<T: CType> From<T> for NonNullCLayout<T> {
     #[inline]
     fn from(wrappedCLayout: T) -> Self {
         NonNullCLayout { wrappedCLayout }
@@ -854,22 +853,28 @@ impl<T : CType> From<T> for NonNullCLayout<T> {
 const _: () = {
     use crate::js::*;
 
-    impl<T : CType + ReprNapi> ReprNapi for NonNullCLayout<T> {
+    impl<T: CType + ReprNapi> ReprNapi for NonNullCLayout<T> {
         type NapiValue = T::NapiValue;
 
-        fn to_napi_value(self: Self, env: &'_ Env) -> Result<Self::NapiValue> {
+        fn to_napi_value(
+            self: Self,
+            env: &'_ Env,
+        ) -> Result<Self::NapiValue> {
             T::to_napi_value(self.wrappedCLayout, env)
         }
 
-        fn from_napi_value(env: &'_ Env, napi_value: Self::NapiValue) -> Result<Self> {
-            T::from_napi_value(env, napi_value).map(|wrapped| NonNullCLayout { wrappedCLayout: wrapped })
+        fn from_napi_value(
+            env: &'_ Env,
+            napi_value: Self::NapiValue,
+        ) -> Result<Self> {
+            T::from_napi_value(env, napi_value).map(|wrapped| NonNullCLayout {
+                wrappedCLayout: wrapped,
+            })
         }
     }
 };
 
-unsafe
-impl<T : CType> CType for NonNullCLayout<T> {
-
+unsafe impl<T: CType> CType for NonNullCLayout<T> {
     type OPAQUE_KIND = T::OPAQUE_KIND;
 
     __cfg_headers__! {
@@ -921,9 +926,7 @@ impl<T : CType> CType for NonNullCLayout<T> {
     }
 }
 
-unsafe
-impl<T : ReprC + CType> ReprC for NonNullCLayout<T> {
-
+unsafe impl<T: ReprC + CType> ReprC for NonNullCLayout<T> {
     type CLayout = T::CLayout;
 
     fn is_valid(it: &'_ Self::CLayout) -> bool {
@@ -931,8 +934,7 @@ impl<T : ReprC + CType> ReprC for NonNullCLayout<T> {
     }
 }
 
-impl<T : CType> NonNullCLayout<*mut T> {
-
+impl<T: CType> NonNullCLayout<*mut T> {
     #[inline]
     pub fn is_null(self) -> bool {
         self.wrappedCLayout.is_null()
@@ -942,7 +944,10 @@ impl<T : CType> NonNullCLayout<*mut T> {
         self.wrappedCLayout
     }
 
-    pub fn align_offset(&self, align: usize) -> usize {
+    pub fn align_offset(
+        &self,
+        align: usize,
+    ) -> usize {
         let addr = self.as_ptr() as usize;
         let misalignment = addr % align;
         if misalignment == 0 {
@@ -953,8 +958,7 @@ impl<T : CType> NonNullCLayout<*mut T> {
     }
 }
 
-impl<T : CType> NonNullCLayout<*const T> {
-
+impl<T: CType> NonNullCLayout<*const T> {
     #[inline]
     pub fn is_null(self) -> bool {
         self.wrappedCLayout.is_null()
@@ -964,7 +968,10 @@ impl<T : CType> NonNullCLayout<*const T> {
         self.wrappedCLayout
     }
 
-    pub fn align_offset(&self, align: usize) -> usize {
+    pub fn align_offset(
+        &self,
+        align: usize,
+    ) -> usize {
         let addr = self.as_ptr() as usize;
         let misalignment = addr % align;
         if misalignment == 0 {

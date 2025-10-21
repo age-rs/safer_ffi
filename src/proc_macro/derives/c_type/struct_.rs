@@ -107,17 +107,21 @@ pub(crate) fn derive(
             })
         })?;
 
-        let ffi_metadata = attrs.iter().find(|attr| { attr.path().is_ident("ffi_metadata") });
+        let ffi_metadata = attrs
+            .iter()
+            .find(|attr| attr.path().is_ident("ffi_metadata"));
 
         if let Some(ffi_metadata) = ffi_metadata {
             let ptr_type = fields
                 .iter()
                 .find(|field| field.ident.as_ref().map_or(false, |ident| ident == "ptr"))
                 .map(|field| &field.ty)
-                .ok_or_else(|| syn::Error::new_spanned(
-                    ffi_metadata,
-                    "Struct annotated with ffi_metadata attribute does not have field 'ptr'."
-                ))?;
+                .ok_or_else(|| {
+                    syn::Error::new_spanned(
+                        ffi_metadata,
+                        "Struct annotated with ffi_metadata attribute does not have field 'ptr'.",
+                    )
+                })?;
 
             let result = ffi_metadata.parse_args::<Ident>();
 

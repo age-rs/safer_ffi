@@ -8,8 +8,8 @@ use self::primitives::FixedIntBitWidth;
 use self::primitives::FloatBitWidth;
 use self::primitives::IntBitWidth;
 use self::primitives::Primitive;
-use super::provider::Provider;
 use super::Definer;
+use super::provider::Provider;
 use crate::utils::DisplayFromFn as F;
 pub mod primitives;
 
@@ -302,7 +302,7 @@ pub trait PhantomCType {
 
     fn metadata(self: &'_ Self) -> &'static dyn Provider;
 
-    fn metadata_type_usage (self: &'_ Self) -> String;
+    fn metadata_type_usage(self: &'_ Self) -> String;
 
     fn size(self: &'_ Self) -> usize;
 
@@ -353,7 +353,7 @@ where
         T::metadata()
     }
 
-    fn metadata_type_usage (self: &'_ Self) -> String {
+    fn metadata_type_usage(self: &'_ Self) -> String {
         T::metadata_type_usage()
     }
 

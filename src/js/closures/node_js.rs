@@ -96,8 +96,7 @@ mod safety_boundary {
                 // ::napi::sys::napi_reference_unref(
                 //     env.raw(), raw_ref_handle, &mut 0,
                 // );
-                let _ignored_status =
-                    ::napi::sys::napi_delete_reference(env.raw(), raw_ref_handle);
+                let _ignored_status = ::napi::sys::napi_delete_reference(env.raw(), raw_ref_handle);
             }
         }
     }

@@ -86,7 +86,7 @@ pub(crate) fn derive(
                     attrs
                         .iter()
                         .filter(|a| a.path().is_ident("ffi_metadata"))
-                        .cloned()
+                        .cloned(),
                 )
                 .collect(),
             vis: {

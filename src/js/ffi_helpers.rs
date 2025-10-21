@@ -132,7 +132,9 @@ pub fn char_p_boxed_to_js_string(
             // return Err(Error::new(Status::InvalidArg, "Got `NULL`".into()));
             ctx.env.get_null()?.into_unknown()
         } else {
-            let p: crate::prelude::char_p::Box = unsafe { crate::layout::from_raw_unchecked(crate::layout::impls::NonNullCLayout::new(p)) };
+            let p: crate::prelude::char_p::Box = unsafe {
+                crate::layout::from_raw_unchecked(crate::layout::impls::NonNullCLayout::new(p))
+            };
             ctx.env.create_string(p.to_str())?.into_unknown()
         }
     })
@@ -176,8 +178,9 @@ pub fn char_p_ref_to_js_string(
             // return Err(Error::new(Status::InvalidArg, "Got `NULL`".into()));
             ctx.env.get_null()?.into_unknown()
         } else {
-            let p: crate::prelude::char_p::Ref<'_> =
-                unsafe { crate::layout::from_raw_unchecked(crate::layout::impls::NonNullCLayout::new(p)) };
+            let p: crate::prelude::char_p::Ref<'_> = unsafe {
+                crate::layout::from_raw_unchecked(crate::layout::impls::NonNullCLayout::new(p))
+            };
             ctx.env.create_string(p.to_str())?.into_unknown()
         }
     })
@@ -297,7 +300,10 @@ pub fn with_out_byte_slice(cb: JsFunction) -> Result<JsUnknown> {
             &format!("{} *", ty),
         )?])?;
         let mut v_js = ctx.env.create_object()?;
-        v_js.set_named_property("ptr", wrap_ptr(ctx.env, v.ptr.wrappedCLayout as _, "uint8_t *")?)?;
+        v_js.set_named_property(
+            "ptr",
+            wrap_ptr(ctx.env, v.ptr.wrappedCLayout as _, "uint8_t *")?,
+        )?;
         v_js.set_named_property("len", ReprNapi::to_napi_value(v.len as usize, ctx.env)?)?;
         v_js.into_unknown()
     })

@@ -1,7 +1,7 @@
 use_prelude!();
 use ::core::slice;
-
 use safer_ffi_proc_macros::ffi_metadata;
+
 use crate::slice::*;
 
 ReprC! {

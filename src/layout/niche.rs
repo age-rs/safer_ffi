@@ -24,26 +24,21 @@ pub unsafe trait HasNiche: ReprC {
 //     }
 // }
 
-unsafe
-impl<T : ReprC + HasNiche> ReprC
-for Option<T>
-{
+unsafe impl<T: ReprC + HasNiche> ReprC for Option<T> {
     type CLayout = OptionCLayout<T::CLayout>;
 
     #[inline]
-    fn is_valid (it: &'_ Self::CLayout) -> bool {
+    fn is_valid(it: &'_ Self::CLayout) -> bool {
         T::is_niche(&it.wrappedCLayout) || <T as ReprC>::is_valid(&it.wrappedCLayout)
     }
 }
 
 #[derive(Debug, Clone, Copy)]
-pub struct OptionCLayout<T : CType> {
+pub struct OptionCLayout<T: CType> {
     pub(crate) wrappedCLayout: T,
 }
 
-unsafe
-impl<T : CType> CType for OptionCLayout<T> {
-
+unsafe impl<T: CType> CType for OptionCLayout<T> {
     type OPAQUE_KIND = T::OPAQUE_KIND;
 
     __cfg_headers__! {
@@ -95,9 +90,7 @@ impl<T : CType> CType for OptionCLayout<T> {
     }
 }
 
-unsafe
-impl<T : ReprC + CType> ReprC for OptionCLayout<T> {
-
+unsafe impl<T: ReprC + CType> ReprC for OptionCLayout<T> {
     type CLayout = T::CLayout;
 
     fn is_valid(it: &'_ Self::CLayout) -> bool {
@@ -109,15 +102,23 @@ impl<T : ReprC + CType> ReprC for OptionCLayout<T> {
 const _: () = {
     use crate::js::*;
 
-    impl<T : CType + ReprNapi> ReprNapi for OptionCLayout<T> {
+    impl<T: CType + ReprNapi> ReprNapi for OptionCLayout<T> {
         type NapiValue = T::NapiValue;
 
-        fn to_napi_value(self: Self, env: &'_ Env) -> Result<Self::NapiValue> {
+        fn to_napi_value(
+            self: Self,
+            env: &'_ Env,
+        ) -> Result<Self::NapiValue> {
             T::to_napi_value(self.wrappedCLayout, env)
         }
 
-        fn from_napi_value(env: &'_ Env, napi_value: Self::NapiValue) -> Result<Self> {
-            T::from_napi_value(env, napi_value).map(|wrapped| OptionCLayout { wrappedCLayout: wrapped })
+        fn from_napi_value(
+            env: &'_ Env,
+            napi_value: Self::NapiValue,
+        ) -> Result<Self> {
+            T::from_napi_value(env, napi_value).map(|wrapped| OptionCLayout {
+                wrappedCLayout: wrapped,
+            })
         }
     }
 };

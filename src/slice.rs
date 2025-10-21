@@ -3,6 +3,7 @@
 use_prelude!();
 use ::core::slice;
 use safer_ffi_proc_macros::ffi_metadata;
+
 #[doc(no_inline)]
 pub use self::slice_mut as Mut;
 #[doc(no_inline)]
