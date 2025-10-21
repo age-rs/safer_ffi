@@ -15,15 +15,6 @@ pub unsafe trait HasNiche: ReprC {
     }
 }
 
-// unsafe impl<T: ReprC + HasNiche> ReprC for Option<T> {
-//     type CLayout = <T as ReprC>::CLayout;
-//
-//     #[inline]
-//     fn is_valid(it: &'_ Self::CLayout) -> bool {
-//         T::is_niche(it) || <T as ReprC>::is_valid(it)
-//     }
-// }
-
 unsafe impl<T: ReprC + HasNiche> ReprC for Option<T> {
     type CLayout = OptionCLayout<T::CLayout>;
 
