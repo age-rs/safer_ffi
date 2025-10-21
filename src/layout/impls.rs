@@ -833,8 +833,39 @@ unsafe impl CType for c_int {
 
 #[derive(Debug, Clone, Copy)]
 pub struct NonNullCLayout<T : CType> {
-    wrappedCLayout: T,
+    pub(crate) wrappedCLayout: T,
 }
+
+impl<T : CType> NonNullCLayout<T> {
+    #[inline]
+    pub(crate) fn new(wrappedCLayout: T) -> Self {
+        NonNullCLayout { wrappedCLayout }
+    }
+}
+
+impl<T : CType> From<T> for NonNullCLayout<T> {
+    #[inline]
+    fn from(wrappedCLayout: T) -> Self {
+        NonNullCLayout { wrappedCLayout }
+    }
+}
+
+#[cfg(feature = "js")]
+const _: () = {
+    use crate::js::*;
+
+    impl<T : CType + ReprNapi> ReprNapi for NonNullCLayout<T> {
+        type NapiValue = T::NapiValue;
+
+        fn to_napi_value(self: Self, env: &'_ Env) -> Result<Self::NapiValue> {
+            T::to_napi_value(self.wrappedCLayout, env)
+        }
+
+        fn from_napi_value(env: &'_ Env, napi_value: Self::NapiValue) -> Result<Self> {
+            T::from_napi_value(env, napi_value).map(|wrapped| NonNullCLayout { wrappedCLayout: wrapped })
+        }
+    }
+};
 
 unsafe
 impl<T : CType> CType for NonNullCLayout<T> {
