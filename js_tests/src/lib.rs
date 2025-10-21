@@ -319,17 +319,17 @@ async fn sleep(ms: u32) {
     }
 }
 
-#[derive_ReprC(js, rename = "my_renamed_ptr")]
+#[derive_ReprC(js)]
 #[repr(transparent)]
 pub struct MyRenamedPtr {
-    pub foo: ::core::ptr::NonNull<()>,
+    pub foo: *const (),
     pub bar: (),
 }
 
 #[ffi_export(js)]
 fn my_renamed_ptr_api() -> MyRenamedPtr {
     MyRenamedPtr {
-        foo: ::core::ptr::NonNull::new(0xbad000 as _).unwrap(),
+        foo: 0xbad000 as _,
         bar: (),
     }
 }
