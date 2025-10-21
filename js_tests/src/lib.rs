@@ -191,7 +191,7 @@ const _: () = {
         cb.make_nodejs_wait_for_this_to_be_dropped(true)?;
         let (data, call) = cb.as_raw_parts();
         unsafe {
-            call(data, c!("Hello, World!").to_str().as_ptr().cast());
+            call(data, ::std::mem::transmute(c!("Hello, World!").to_str().as_ptr()));
         }
         ctx.env.get_undefined()
     }
