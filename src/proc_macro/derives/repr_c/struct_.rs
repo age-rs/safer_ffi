@@ -76,11 +76,11 @@ pub(crate) fn derive(
                 .cloned()
                 .chain([
                     parse_quote!(
-                            #[allow(nonstandard_style)]
-                        ),
+                        #[allow(nonstandard_style)]
+                    ),
                     parse_quote!(
-                            #[repr(C)]
-                        ),
+                        #[repr(C)]
+                    ),
                 ])
                 .chain(
                     attrs
@@ -226,8 +226,8 @@ pub(crate) fn derive_transparent(
 
     let ref impl_generics = generics.clone().also(|g| {
         g.make_where_clause().predicates.push(parse_quote!(
-                #FieldTy : #ඞ::ReprC
-            ));
+            #FieldTy : #ඞ::ReprC
+        ));
     });
 
     let (intro_generics, fwd_generics, where_clauses) = impl_generics.split_for_impl();
@@ -243,11 +243,11 @@ pub(crate) fn derive_transparent(
                     .cloned()
                     .chain([
                         parse_quote!(
-                                #[repr(transparent)]
-                            ),
+                            #[repr(transparent)]
+                        ),
                         parse_quote!(
-                                #[allow(nonstandard_style)]
-                            ),
+                            #[allow(nonstandard_style)]
+                        ),
                     ])
                     .collect(),
                 vis: {
@@ -262,7 +262,7 @@ pub(crate) fn derive_transparent(
                 generics: impl_generics.clone(),
                 fields: Fields::Unnamed(parse_quote!((
                     #ඞ::CLayoutOf<#FieldTy>,
-                    #ඞ::CLayoutOf<::core::marker::PhantomData<fn(&()) -> &mut Self>>,
+                    #ඞ::CLayoutOf<#ඞ::PhantomData<fn(&()) -> &mut Self>>,
                 ))),
                 semi_token: Some(parse_quote!(
                     ;
@@ -440,7 +440,7 @@ pub(crate) fn derive_opaque(
         #[cfg(feature = "headers")]
         let header_generation = {
             drop(header_generation);
-            let ref short_name: Quote![ String ] = match args.rename {
+            let ref short_name: Quote![String] = match args.rename {
                 | Some(string_expr) => quote!(
                     #ඞ::From::from(#string_expr)
                 ),

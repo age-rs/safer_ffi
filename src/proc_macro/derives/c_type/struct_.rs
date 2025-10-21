@@ -45,18 +45,16 @@ pub(crate) fn derive(
         // invoke the legacy `CType!` macro which is the one currently featuring
         // the js FFI glue generating logic.
         let (params, bounds) = generics.my_split();
-        ret.extend(quote!(
-            ::safer_ffi::layout::CType! {
-                #[repr(C, js)]
-                #pub_
-                struct #StructName
-                    [#params]
-                where {
-                    #(#bounds ,)*
-                }
-                #fields
+        ret.extend(quote!(::safer_ffi::layout::CType! {
+            #[repr(C, js)]
+            #pub_
+            struct #StructName
+                [#params]
+            where {
+                #(#bounds ,)*
             }
-        ))
+            #fields
+        }))
     }
 
     let mut impl_body = quote!(
@@ -269,7 +267,7 @@ pub(crate) fn derive_transparent(
                     definer: &'_ mut dyn #ඞ::Definer,
                 ) -> #ඞ::io::Result<()>
                 {
-                    ::core::unimplemented!("directly handled in `define_self()`");
+                    #ඞ::unimplemented!("directly handled in `define_self()`");
                 }
 
                 fn define_self (
@@ -394,7 +392,7 @@ pub(crate) fn derive_transparent(
                 ) -> #js::Result<Self>
                 {
                     let inner = <#CFieldTy as #js::ReprNapi>::from_napi_value(env, napi_value)?;
-                    #js::Result::Ok(unsafe { #ඞ::core::mem::transmute::<#CFieldTy, Self>(inner) })
+                    #js::Result::Ok(unsafe { #ඞ::mem::transmute::<#CFieldTy, Self>(inner) })
                 }
             }
         ));
