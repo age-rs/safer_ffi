@@ -8,8 +8,8 @@ use self::primitives::FixedIntBitWidth;
 use self::primitives::FloatBitWidth;
 use self::primitives::IntBitWidth;
 use self::primitives::Primitive;
-use super::Definer;
 use super::provider::Provider;
+use super::Definer;
 use crate::utils::DisplayFromFn as F;
 pub mod primitives;
 

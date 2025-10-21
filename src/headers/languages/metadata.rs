@@ -1,15 +1,14 @@
 #![cfg_attr(rustfmt, rustfmt::skip)]
 
-use core::fmt::Display;
-use std::io::{BufRead, Write};
-use libc::write;
+use super::*;
 use crate::layout;
 use crate::utils::DisplayFromFn;
-use super::*;
+use core::fmt::Display;
+use std::io::Write;
 
 pub struct Metadata;
 
-impl<F: Fn(&mut dyn ::std::io::Write) -> ::std::io::Result<()>> DisplayFromFn<F> {
+impl<F: Fn(&mut dyn Write) -> io::Result<()>> DisplayFromFn<F> {
     fn indented_lines(&self) -> String {
         self.to_string().lines().map(|line| format!("    {line}\n")).collect()
     }
