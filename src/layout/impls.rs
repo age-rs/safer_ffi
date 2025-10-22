@@ -835,6 +835,7 @@ pub struct NonNullCLayout<T: CType> {
     pub(crate) wrappedCLayout: T,
 }
 
+#[cfg(feature = "js")]
 impl<T: CType> NonNullCLayout<T> {
     #[inline]
     pub(crate) fn new(wrappedCLayout: T) -> Self {
