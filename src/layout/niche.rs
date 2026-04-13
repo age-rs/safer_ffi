@@ -24,6 +24,15 @@ unsafe impl<T: ReprC + HasNiche> ReprC for Option<T> {
     }
 }
 
+/// C-layout wrapper for Rust's [`Option<T>`] where `T: HasNiche`.
+///
+/// Delegates all [`CType`] methods to the inner type `T`, making it
+/// transparent at the C ABI level. Validity checks use the niche
+/// representation: a value is `None` when [`HasNiche::is_niche`] returns
+/// `true` for the wrapped layout, and `Some` otherwise.
+///
+/// See also: [`crate::layout::impls::NonNullCLayout`] for the analogous
+/// wrapper used by non-null pointer types.
 #[derive(Debug, Clone, Copy)]
 pub struct OptionCLayout<T: CType> {
     pub(crate) wrappedCLayout: T,

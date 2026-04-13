@@ -830,6 +830,17 @@ unsafe impl CType for c_int {
     }
 }
 
+/// C-layout wrapper for Rust's [`core::ptr::NonNull<T>`] pointer types.
+///
+/// Delegates all [`CType`] methods to the inner type `T`, making it
+/// transparent at the C ABI level (same size, alignment, and representation
+/// as a raw pointer). The wrapper exists so that `impl_ReprC_for!` can
+/// distinguish non-null pointer parameters from nullable ones, enabling
+/// richer type metadata (e.g. `"kind": "NonNull"` in the Metadata language)
+/// without changing the C calling convention.
+///
+/// See also: [`crate::layout::niche::OptionCLayout`] for the analogous
+/// wrapper used by `Option<T>` where `T: HasNiche`.
 #[derive(Debug, Clone, Copy)]
 pub struct NonNullCLayout<T: CType> {
     pub(crate) wrappedCLayout: T,
