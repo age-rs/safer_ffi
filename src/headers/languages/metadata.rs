@@ -83,13 +83,13 @@ impl HeaderLanguage for Metadata {
         Ok(())
     }
 
-    fn declare_struct (
+    fn declare_struct(
         self: &'_ Self,
         this: &dyn HeaderLanguage,
         ctx: &'_ mut dyn Definer,
         docs: Docs<'_>,
         self_ty: &'_ dyn PhantomCType,
-        fields: &'_ [StructField<'_>]
+        fields: &'_ [StructField<'_>],
     ) -> io::Result<()> {
         let ref indent = Indentation::new(4);
         mk_out!(indent, ctx.out());
@@ -143,7 +143,7 @@ impl HeaderLanguage for Metadata {
         Ok(())
     }
 
-    fn declare_opaque_type (
+    fn declare_opaque_type(
         self: &'_ Self,
         _this: &dyn HeaderLanguage,
         ctx: &'_ mut dyn Definer,
@@ -172,7 +172,7 @@ impl HeaderLanguage for Metadata {
         Ok(())
     }
 
-    fn declare_function (
+    fn declare_function(
         self: &'_ Self,
         this: &dyn HeaderLanguage,
         ctx: &'_ mut dyn Definer,
@@ -348,7 +348,7 @@ impl HeaderLanguage for Metadata {
         writeln!(out, r#"}}"#)
     }
 
-    fn declare_constant (
+    fn declare_constant(
         self: &'_ Self,
         this: &dyn HeaderLanguage,
         ctx: &'_ mut dyn Definer,
@@ -396,7 +396,7 @@ impl HeaderLanguage for Metadata {
         Ok(())
     }
 
-    fn emit_docs (
+    fn emit_docs(
         self: &'_ Self,
         ctx: &'_ mut dyn Definer,
         docs: Docs<'_>,
@@ -442,7 +442,6 @@ impl HeaderLanguage for Metadata {
 }
 
 impl Metadata {
-
     fn emit_type_usage(
         self: &'_ Self,
         _this: &dyn HeaderLanguage,
