@@ -35,6 +35,9 @@ impl<'lt> char_p_ref<'lt> {
     pub const unsafe fn from_ptr_unchecked(ptr: ptr::NonNull<u8>) -> Self {
         Self(
             ptr::NonNullRef(ptr.cast()),
+            #[cfg(not(feature = "stabby"))]
+            PhantomData,
+            #[cfg(feature = "stabby")]
             PhantomCovariantLifetime::<'static>(PhantomData),
         )
     }

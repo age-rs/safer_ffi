@@ -13,7 +13,9 @@ cfg_alloc! {
     pub use slice_boxed as Box;
 }
 
-/// The phantoms from the crate are not `ReprC`.
+/// Shadow the crate-level `PhantomCovariantLifetime` because `ReprC!`
+/// requires all fields to implement `ReprC`, which `PhantomData` does
+/// but the stabby wrapper struct does not.
 type PhantomCovariantLifetime<'lt> = PhantomData<&'lt ()>;
 
 ReprC! {
