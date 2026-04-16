@@ -13,6 +13,11 @@ pub struct NonNullRef<T>(
     pub ptr::NonNull<T>, // Variance OK because immutable
 );
 
+/// Shadow the crate-level `PhantomInvariant` because the stabby wrapper is
+/// `#[repr(C)]` and cannot appear inside `#[repr(transparent)]` structs
+/// (rust-lang/rust#78586).
+type PhantomInvariant<T> = PhantomData<fn(&T) -> &T>;
+
 #[cfg_attr(feature = "stabby", stabby::stabby)]
 #[repr(transparent)]
 pub struct NonNullMut<T>(
