@@ -38,10 +38,7 @@ impl char_p_ref<'static> {
 
 impl<'lt> char_p_ref<'lt> {
     pub const unsafe fn from_ptr_unchecked(ptr: ptr::NonNull<u8>) -> Self {
-        Self(
-            ptr::NonNullRef(ptr.cast()),
-            PhantomData,
-        )
+        Self(ptr::NonNullRef(ptr.cast()), PhantomData)
     }
 }
 
