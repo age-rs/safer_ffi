@@ -2,6 +2,7 @@
 
 use_prelude!();
 use ::core::slice;
+use safer_ffi_proc_macros::ffi_metadata;
 
 #[doc(no_inline)]
 pub use self::slice_mut as Mut;
@@ -12,11 +13,14 @@ cfg_alloc! {
     pub use slice_boxed as Box;
 }
 
-/// The phantoms from the crate are not `ReprC`.
+/// Shadow the crate-level `PhantomCovariantLifetime` because `ReprC!`
+/// requires all fields to implement `ReprC`, which `PhantomData` does
+/// but the stabby wrapper struct does not.
 type PhantomCovariantLifetime<'lt> = PhantomData<&'lt ()>;
 
 ReprC! {
     #[repr(C, js)]
+    #[ffi_metadata(DynamicArray)]
     /// Like [`slice_ref`] and [`slice_mut`], but with any lifetime attached
     /// whatsoever.
     ///
@@ -83,6 +87,7 @@ impl<T> slice_raw<T> {
 cfg_alloc! {
     ReprC! {
         #[repr(C, js)]
+        #[ffi_metadata(DynamicArray)]
         #[cfg_attr(all(docs, feature = "nightly"), doc(cfg(feature = "alloc")))]
         /// [`Box`][`rust::Box`]`<[T]>` (fat pointer to a slice),
         /// but with a guaranteed `#[repr(C)]` layout.
@@ -247,6 +252,7 @@ cfg_alloc! {
 
 ReprC! {
     #[repr(C, js)]
+    #[ffi_metadata(DynamicArray)]
     /// `&'lt [T]` but with a guaranteed `#[repr(C)]` layout.
     ///
     /// # C layout (for some given type T)
@@ -341,6 +347,7 @@ impl<'lt, T: 'lt> From<slice_ref<'lt, T>> for slice_raw<T> {
 
 ReprC! {
     #[repr(C)]
+    #[ffi_metadata(DynamicArray)]
     /// `&'lt mut [T]` but with a guaranteed `#[repr(C)]` layout.
     ///
     /// # C layout (for some given type T)

@@ -5,6 +5,11 @@
 use_prelude!();
 use ::core::slice;
 
+/// Shadow the crate-level `PhantomCovariantLifetime` because the stabby
+/// wrapper is `#[repr(C)]` and cannot appear inside `#[repr(transparent)]`
+/// structs (rust-lang/rust#78586).
+type PhantomCovariantLifetime<'lt> = PhantomData<&'lt ()>;
+
 ReprC! {
     #[repr(transparent)]
     #[derive(Clone, Copy)]
@@ -33,10 +38,7 @@ impl char_p_ref<'static> {
 
 impl<'lt> char_p_ref<'lt> {
     pub const unsafe fn from_ptr_unchecked(ptr: ptr::NonNull<u8>) -> Self {
-        Self(
-            ptr::NonNullRef(ptr.cast()),
-            PhantomCovariantLifetime::<'static>(PhantomData),
-        )
+        Self(ptr::NonNullRef(ptr.cast()), PhantomData)
     }
 }
 

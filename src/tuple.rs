@@ -9,7 +9,9 @@ mod void {
     #[derive(Clone, Copy)]
     #[allow(missing_debug_implementations)]
     pub struct CVoid {
-        _0: (),
+        /// Public so the compiler can verify this is zero-sized in
+        /// `#[repr(transparent)]` contexts (rust-lang/rust#78586).
+        pub _0: (),
     }
     // pub const CVoid: CVoid = CVoid { _0: () };
 }
@@ -29,6 +31,10 @@ unsafe impl CType for CVoid {
         ) -> io::Result<()>
         {
             Ok(())
+        }
+
+        fn metadata_type_usage() -> String {
+            r#""kind": "void""#.into()
         }
 
         fn render(

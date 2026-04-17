@@ -239,7 +239,7 @@ jobs:
           fi
           echo "All jobs succeeded"
 
-  # Deploy to Github pages #
+  # Deploy to GitHub pages #
   deploy:
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-20.04
